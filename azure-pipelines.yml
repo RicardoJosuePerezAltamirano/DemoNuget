@@ -30,14 +30,10 @@ steps:
   
   - task: NuGetAuthenticate@0
     displayName: 'NuGet Authenticate'
-  - task: DotNetCoreCLI@2
-    displayName: dotnet nuget push
-    inputs:
-      command: push
-      feedPublish: NugetArtifactsDemo/Demo2
-  - task: PublishBuildArtifacts@1
-    displayName: publish artifact
-    condition: succeededOrFailed()
-    inputs:
-      PathtoPublish: $(build.artifactstagingdirectory)
-      TargetPath: '\$(Build.DefinitionName)\$(Build.BuildNumber)'
+ 
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '1e90aa70-2283-458a-8bb9-8eaad5d43b8b/244ad4da-6cd0-47e3-9a18-1bfdbb01fc35'
