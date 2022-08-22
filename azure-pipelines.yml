@@ -35,3 +35,9 @@ steps:
     inputs:
       command: push
       feedPublish: NugetArtifactsDemo/Demo2
+  - task: PublishBuildArtifacts@1
+    displayName: publish artifact
+    condition: succeededOrFailed()
+    inputs:
+      PathtoPublish: $(build.artifactstagingdirectory)
+      TargetPath: '\$(Build.DefinitionName)\$(Build.BuildNumber)'
