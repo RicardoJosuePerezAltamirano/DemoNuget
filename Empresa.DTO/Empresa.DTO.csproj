@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>DTO Proyecto Empresa</Title>
+    <Authors>Ricardo Josue Perez Altamirano</Authors>
+    <Description>Proyecto que contiene DTO para un proyecto de una empresa</Description>
+    <PackageProjectUrl>http://solvereti.com</PackageProjectUrl>
+    <PackageReleaseNotes>version inicial</PackageReleaseNotes>
+    <AssemblyVersion>1.0</AssemblyVersion>
+    <FileVersion>1.0</FileVersion>
+  </PropertyGroup>
+
+</Project>
