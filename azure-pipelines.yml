@@ -33,5 +33,5 @@ steps:
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
-    publishVstsFeed: 'NugetArtifactsDemo/Demo'
+    publishVstsFeed: 'NugetArtifactsDemo/Demo2'
     nugetConfigPath: '$(Build.WorkingDirectory)/NuGet.config'
