@@ -32,4 +32,4 @@ steps:
     displayName: dotnet nuget push
     inputs:
       command: push
-      feedPublish: nuget artifacts demo/Demo
+      feedPublish: NugetArtifactsDemo/Demo2
