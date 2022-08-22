@@ -28,14 +28,10 @@ steps:
       zipAfterPublish: True
       searchPatternPack: '**/*/*.csproj'
   
+  - task: NuGetAuthenticate@0
+    displayName: 'NuGet Authenticate'
   - task: DotNetCoreCLI@2
     displayName: dotnet nuget push
     inputs:
       command: push
       feedPublish: NugetArtifactsDemo/Demo2
-  - task: PublishBuildArtifacts@1
-    displayName: publish artifact
-    condition: succeededOrFailed()
-    inputs:
-      PathtoPublish: $(build.artifactstagingdirectory)
-      TargetPath: '\$(Build.DefinitionName)\$(Build.BuildNumber)'
