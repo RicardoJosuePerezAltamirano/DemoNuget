@@ -1,39 +1,29 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
-trigger:
-- master
 
 pool:
-  vmImage: ubuntu-latest
-
-variables:
-  buildConfiguration: 'Release'
+  name: Azure Pipelines
+  demands:
+  - msbuild
+  - visualstudio
 
 steps:
-  - task: DotNetCoreCLI@2
-    displayName: dotnet build
-    inputs:
-      projects: '**/*/*.csproj'
-      arguments: --configuration $(BuildConfiguration)
-  - task: DotNetCoreCLI@2
-    displayName: dotnet pack
-    inputs:
-      command: pack
-      publishWebProjects: false
-      projects: '**/*.sln'
-      arguments: --output $(Build.ArtifactStagingDirectory)/
-      zipAfterPublish: True
-      searchPatternPack: '**/*/*.csproj'
-  
-  - task: NuGetAuthenticate@0
-    displayName: 'NuGet Authenticate'
 
-  - task: NuGetCommand@2
-    inputs:
-      command: 'push'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-      nuGetFeedType: 'internal'
-      publishVstsFeed: '1e90aa70-2283-458a-8bb9-8eaad5d43b8b/244ad4da-6cd0-47e3-9a18-1bfdbb01fc35'
+- task: UseDotNet@2
+  inputs:
+    version: '6.0.0'
+- task: VSBuild@1
+  displayName: 'Build solution **\*.sln'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet pack'
+  inputs:
+    command: pack
+    versioningScheme: byBuildNumber
+
+- task: NuGetCommand@2
+  displayName: 'NuGet push'
+  inputs:
+    command: push
+    publishVstsFeed: '1e90aa70-2283-458a-8bb9-8eaad5d43b8b/244ad4da-6cd0-47e3-9a18-1bfdbb01fc35'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
