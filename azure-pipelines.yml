@@ -1,29 +1,37 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
 
 pool:
-  name: Azure Pipelines
-  demands:
-  - msbuild
-  - visualstudio
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
 
 steps:
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
+  # my working directory is src
+  workingDirectory: src
 
-- task: UseDotNet@2
-  inputs:
-    version: '6.0.400'
-- task: VSBuild@1
-  displayName: 'Build solution **\*.sln'
-
+# Package a project
 - task: NuGetCommand@2
-  displayName: 'NuGet pack'
   inputs:
-    command: pack
-    versioningScheme: byBuildNumber
+    command: 'pack'
+    packagesToPack: '**/*.csproj'
+    packDestination: '$(Build.ArtifactStagingDirectory)'
 
+- task: NuGetAuthenticate@0
+  displayName: 'NuGet authenticate'
+
+# Push a project
 - task: NuGetCommand@2
-  displayName: 'NuGet push'
   inputs:
-    command: push
-    publishVstsFeed: '1e90aa70-2283-458a-8bb9-8eaad5d43b8b/244ad4da-6cd0-47e3-9a18-1bfdbb01fc35'
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact: drop'
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
+    publishVstsFeed: 'NugetArtifactsDemo/Demo'
+    nugetConfigPath: '$(Build.WorkingDirectory)/NuGet.config'
